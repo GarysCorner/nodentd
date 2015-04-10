@@ -55,6 +55,9 @@ exports.start = function() {
 	});
 
 
+	server.on('listening', function() {
+		log.log('nodentd listening on port '.concat( config.port ));
+	});
 
 	server.on('error', function(err) {
 		log.log('Failed to listen on port '.concat(config.port, ' exiting with code 6:  ', err) );
