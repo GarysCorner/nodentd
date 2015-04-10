@@ -1,0 +1,5 @@
+
+#ignore the configuration file as it does not ship and will contain whatever we were using for our testing
+config.js
+*~
+
