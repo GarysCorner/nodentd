@@ -10,7 +10,7 @@ exports.getconfig = {
 		port: 113,  //port to listen on
 		debug: false,  //toggle the debug which will set the verbosity very high
 
-		nameproviders: [ 'use_ip_port', 'use_ip', 'use_port',  'random_fromlist' /* 'defaultname' */ ],  //list of resolvers in a typical stack
+		nameproviders: [ 'use_ip_port', 'use_ip', 'use_port',  'random_fromlist' /* , 'defaultname' */ ],  //list of resolvers in a typical stack
 
 		provider: {  //configuration options for the providers you can have configurations options for all providers, but only providers listed in "nameproviders" will be used
 			defaultname: {    //options for default name provider.  The default name provider will only return the username specified bellow, and will not fail under any conditions as long as the username is set.  Default name will probably not be used in all but the dumbest identd servers
