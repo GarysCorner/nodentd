@@ -3,16 +3,17 @@
 //Arthur:	Gary Bezet <nodentd@GarysCorner.NET>
 //Desciption:	Logging subsystem, should be simple
 
+var util = require('util');
+
 exports.log = function( text, verbose ) {
 
-	var logline = '['.concat( Math.floor(new Date() / 1000), '] ', text );
-
+	
 	if( typeof verbose === 'undefined' ) { verbose = false; }
 
 	if( verbose ) {
-		config.debug && console.log(logline);
+		config.debug && util.log(text);
 	} else {
-		console.log( logline );
+		util.log( text );
 	}
 
 	
