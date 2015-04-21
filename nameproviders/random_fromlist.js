@@ -20,7 +20,7 @@ exports.init = function() {
 		try {  //catch error if we can't load the read the file for any reason
 			var filedata = fs.readFileSync(config.provider.random_fromlist.file, { encoding: 'ascii' });  //read file into a variable...watch the file size on this one
 		} catch( err ) {
-			log.log('random_fromlist name provider error reading username file:  '.concat( err ));
+			log.log('random_fromlist name provider error reading username file:  ', err );
 			return false;
 		}
 		

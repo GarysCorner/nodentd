@@ -41,24 +41,24 @@ function parseline(socket) {
 
 
 	if( validcheckRegex.test(socket.linebuff) ) {
-		log.dlog('Line from '.concat( socket.remoteAddr, ' tests valid format'));  //verbose
+		log.dlog('Line from ', socket.remoteAddr, ' tests valid format');  //verbose
 
 		var portsearchresults = socket.linebuff.match(pullportRegex);
 
 		socket.portPair = [ parseInt(portsearchresults[0]), parseInt(portsearchresults[1])  ];
 
-		log.dlog('Port-pair '.concat( socket.portPair, ' request by ', socket.remoteAddr));  //We prent this no matter what to main log file file.
+		log.dlog('Port-pair ', socket.portPair, ' request by ', socket.remoteAddr);  //We prent this no matter what to main log file file.
 		
 		if(  socket.portPair[0] > 65535 && socket.portPair[1] > 65535) {  //invalid  port return error
 
-			log.log('Invalid ports request '.concat( socket.portPair, ' request by ', socket.remoteAddr) );
+			log.log('Invalid ports request ', socket.portPair, ' request by ', socket.remoteAddr );
 
 			socket.end( socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : ERROR : INVALID-PORT\r\n'));
 
 		} else {  //port is valid lets resolve
 			var responce = resolver.resolve(socket);
 			
-			log.log('Responce sent to :'.concat( socket.remoteAddr, ' -> ', responce.slice(0,-2)));
+			log.log('Responce sent to :', socket.remoteAddr, ' -> ', responce.slice(0,-2));
 
 			socket.end(responce);
 		}

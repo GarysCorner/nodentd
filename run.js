@@ -18,7 +18,7 @@ try {
 
 datahandler = require('./datahandler');  //get datahandler module
 
-server = require('./server.js');
+server = require('./server');
 
 
 //////////////////Globals//////////////////
