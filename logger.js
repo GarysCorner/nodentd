@@ -5,17 +5,24 @@
 
 var util = require('util');
 
-exports.log = function( text, verbose ) {
 
-	
-	if( typeof verbose === 'undefined' ) { verbose = false; }
+//Standard logging
+exports.log = function() {
 
-	if( verbose ) {
-		config.debug && util.log(text);
-	} else {
-		util.log( text );
+	var output = String().concat.apply(arguments[0], Array.prototype.slice.call(arguments, 1));
+
+	util.log( output );
+};
+
+
+//debug loging, things here only get logged if config.debug is true
+exports.dlog = function() {
+
+	if(config.debug) {
+		var output = String().concat.apply(arguments[0], Array.prototype.slice.call(arguments, 1));
+
+		util.log( output );
+
 	}
-
-	
 
 };

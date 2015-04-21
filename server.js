@@ -33,7 +33,7 @@ exports.start = function() {
 		socket.linebuff = '';  //initalize the linebuffer
 
 
-		log.log( 'Connection open from '.concat( socket.remoteAddr), true );
+		log.dlog( 'Connection open from ', socket.remoteAddr);
 
 
 		socket.on('data', function(data) {
@@ -41,11 +41,11 @@ exports.start = function() {
 		});
 
 		socket.on('end' ,function() {
-			log.log('Connection from '.concat( socket.remoteAddr ,' closed'), true);
+			log.dlog('Connection from ', socket.remoteAddr ,' closed');
 		});
 
 		socket.on('error', function() {
-			log.log('Connection error addr: '.concat( socket.remoteAddr, ' closing connection' ));
+			log.log('Connection error addr: ', socket.remoteAddr, ' closing connection' );
 			socket.destroy();
 		});
 
@@ -56,11 +56,11 @@ exports.start = function() {
 
 
 	server.on('listening', function() {
-		log.log('nodentd listening on port '.concat( config.port ));
+		log.log('nodentd listening on port ', config.port );
 	});
 
 	server.on('error', function(err) {
-		log.log('Failed to listen on port '.concat(config.port, ' exiting with code 6:  ', err) );
+		log.log('Failed to listen on port ', config.port, ' exiting with code 6:  ', err);
 		process.exit(6);
 	});
 
