@@ -33,7 +33,7 @@ exports.start = function() {
 		socket.linebuff = '';  //initalize the linebuffer
 
 
-		log.log( 'Connection open from '.concat( socket.remoteAddr), true );
+		log.dlog( 'Connection open from '.concat( socket.remoteAddr));
 
 
 		socket.on('data', function(data) {
@@ -41,7 +41,7 @@ exports.start = function() {
 		});
 
 		socket.on('end' ,function() {
-			log.log('Connection from '.concat( socket.remoteAddr ,' closed'), true);
+			log.dlog('Connection from '.concat( socket.remoteAddr ,' closed'));
 		});
 
 		socket.on('error', function() {

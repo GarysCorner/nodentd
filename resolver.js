@@ -18,18 +18,18 @@ exports.init = function() {
 	
 	for (var i =0; i < config.nameproviders.length; i++ ) {  //iterate through the name providers
 		
-		log.log('Loading name provider: '.concat( config.nameproviders[i]), true );
+		log.dlog('Loading name provider: '.concat( config.nameproviders[i]));
 
 		providers.push(require('./nameproviders/'.concat(config.nameproviders[i])));
 		
 
-		log.log('Intializeing name provider: '.concat( config.nameproviders[i]), true );
+		log.dlog('Intializeing name provider: '.concat( config.nameproviders[i]));
 
 		if( ! providers[i].init() ) {    //each provider must be initialized and must return true
 			log.log('Fatal error, failed to initialize name provider: '.concat( config.nameproviders[i]));
 			process.exit(2);
 		} else {
-			log.log('Name provider successfully initialized: '.concat(config.nameproviders[i] ), true );
+			log.dlog('Name provider successfully initialized: '.concat(config.nameproviders[i] ));
 		}
 	}
 

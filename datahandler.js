@@ -41,13 +41,13 @@ function parseline(socket) {
 
 
 	if( validcheckRegex.test(socket.linebuff) ) {
-		log.log('Line from '.concat( socket.remoteAddr, ' tests valid format'), true);  //verbose
+		log.dlog('Line from '.concat( socket.remoteAddr, ' tests valid format'));  //verbose
 
 		var portsearchresults = socket.linebuff.match(pullportRegex);
 
 		socket.portPair = [ parseInt(portsearchresults[0]), parseInt(portsearchresults[1])  ];
 
-		log.log('Port-pair '.concat( socket.portPair, ' request by ', socket.remoteAddr), true );  //We prent this no matter what to main log file file.
+		log.dlog('Port-pair '.concat( socket.portPair, ' request by ', socket.remoteAddr));  //We prent this no matter what to main log file file.
 		
 		if(  socket.portPair[0] > 65535 && socket.portPair[1] > 65535) {  //invalid  port return error
 
