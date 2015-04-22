@@ -1,7 +1,7 @@
 README
 ===================
 
-nodentd v0.9 by:  Gary Bezet <nodentd@GarysCorner.NET>
+nodentd v1.0 by:  Gary Bezet <nodentd@GarysCorner.NET>
 ----------------------------------------------------------
 pronounced no-dent-D
 
@@ -9,7 +9,12 @@ pronounced no-dent-D
 Change Log
 +++++++++++++++++++
 
-v0.9    -    Initial commit
+v1.0	-	First real stable release
+	*Detect possible portscan
+	*log connection that close without a input line
+	*Changed logger to use util.log and added new debug logging method
+
+v0.9    -	Initial commit
 
 
 
@@ -18,7 +23,7 @@ Setup
 
 To setup nodentd, simple copy the contents of config.sample.js to config.js.  Then use your favorite text editor to modified the contents of config.js to suit your needs.  Pay special attention to the comments.
 
-Configuration is done by exporting a json object so make sure your formating is correct.  DO NO EXCEPT CONFIG FILES FROM PEOPLE YOU DO NOT KNOW, config files are run just like any other part of the program and malicious users can insert code.
+Configuration is done by exporting a JSON object so make sure your formating is correct.  DO NO EXCEPT CONFIG FILES FROM PEOPLE YOU DO NOT KNOW, config files are run just like any other part of the program and malicious users can insert code.
 
 The name providers are called in the order listed in the nameprovders array.  If a nameprovider returns false (no name) then the next provider is used.  Keep in mind that some providers like the "random_fromlist" provider and the "defaultname" provider always return a valid username and so no nameproviders placed after them in the stack will ever be called.
 
@@ -27,7 +32,7 @@ To test your config file you may want to setup "debug" to true, which will produ
 Running
 +++++++++++++++++++
 
-To run nodentd simple use call run "run.js" using node.js, if you are using nodentd in production you should write a script that starts nodentd again if it crashes because an unknown error bubbles up.
+To start nodentd simply run "run.js" using node.js, if you are using nodentd in production you should write a script that starts nodentd again if it crashes because an unknown error bubbles up.
 
 License
 +++++++++++++++++++
