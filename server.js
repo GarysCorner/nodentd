@@ -48,8 +48,13 @@ exports.start = function() {
 			}
 		});
 
-		socket.on('error', function() {
-			log.log('Connection error addr: ', socket.remoteAddr, ' closing connection' );
+		socket.on('error', function(err) {
+			if( (err.code === 'ECONNRESET') && (socket.remoteAddr == null) ) {  //test show this connection happens during an nmap synscan
+				log.log('Warning! Possible port scan detected!');
+			} else {
+				log.log('Connection error addr: ', socket.remoteAddr, ' destroying connection');
+			}
+
 			socket.destroy();
 		});
 
