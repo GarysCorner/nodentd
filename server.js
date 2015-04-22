@@ -31,7 +31,7 @@ exports.start = function() {
 	
 		socket.remoteAddr = socket.remoteAddress;  //save the remote address in case we need it after close
 		socket.linebuff = '';  //initalize the linebuffer
-
+		socket.lineRecv = false;  //set lineRecv so we can tell if a line was received when the client exits.  (Fix issue#1)
 
 		log.dlog( 'Connection open from ', socket.remoteAddr);
 
@@ -41,7 +41,11 @@ exports.start = function() {
 		});
 
 		socket.on('end' ,function() {
-			log.dlog('Connection from ', socket.remoteAddr ,' closed');
+			if(!socket.lineRecv) {  //check to see if a line was actually received from the client, and throw a non-debug log event  (Fix issue#1)
+				log.log('Connection from', socket.remoteAddr ,' closed without valid line!');
+			} else {
+				log.dlog('Connection from ', socket.remoteAddr ,' closed');
+			}
 		});
 
 		socket.on('error', function() {

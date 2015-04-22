@@ -39,6 +39,7 @@ exports.datareceived = function (data, socket) {
 //parse line and get out the local and remote ports, or output error and end connection
 function parseline(socket) {
 
+	socket.lineRecv = true;  //set lineRecv so we can throw log even if there is no from client.  (Fix issue#1)
 
 	if( validcheckRegex.test(socket.linebuff) ) {
 		log.dlog('Line from ', socket.remoteAddr, ' tests valid format');  //verbose
