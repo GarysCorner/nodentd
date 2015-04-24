@@ -57,11 +57,10 @@ function parseline(socket) {
 			socket.end( socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : ERROR : INVALID-PORT\r\n'));
 
 		} else {  //port is valid lets resolve
-			var responce = resolver.resolve(socket);
 			
-			log.log('Responce sent to :', socket.remoteAddr, ' -> ', responce.slice(0,-2));
 
-			socket.end(responce);
+			resolver.resolve(socket, sendReplyCallBack);  //call the resolver with our callback
+			
 		}
 
 		
@@ -74,7 +73,21 @@ function parseline(socket) {
 
 };
 
+function sendReplyCallBack(result, socket) {  //our callback to send the 
 
+	var response;
+
+	if( result ) {  //return the result
+		response = socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : UNIX : ', result, '\r\n');
+	} else {
+		response = '23, 6195 : ERROR : NO-USER\r\n'; 
+	}
+
+	socket.end( response );
+
+	log.log('Response sent to :', socket.remoteAddr, ' -> ', result);
+
+};
 
 
 

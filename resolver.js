@@ -37,22 +37,38 @@ exports.init = function() {
 
 
 //returns the string to be sent to client
-exports.resolve = function( socket ) {
+exports.resolve = function( socket, callback ) {
 	
-	var result;
+	var loop = resolverLoop(callback);  //callback loop varable
 
-	for (i =0; i < providers.length; i++ ) {  //iterate through the name providers
-		result = providers[i].providename(socket);
+	loop(false, socket, loop);  //call the callback loop using itself as a variable
+
+
+	
+
+
+};
+
+
+function resolverLoop(finalcallback) {
+
+	var counter = -1;  //start at negative 1 to offset preincrement
 		
-		if( result ) { break; } //quit the loop if successful
 
-	}
+	return function(result, socket, callbackLoop) {
 
-	if( result ) {  //return the result
-		return socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : UNIX : ', result, '\r\n');
-	} else {
-		return '23, 6195 : ERROR : NO-USER\r\n';
-	}
+		counter++;  //preincrment
+
+
+		if( counter === providers.length || result !== false ) {  //if we have reached the last nameprovider return to dataprovider
+			finalcallback(result, socket);
+		} else {
+			
+			providers[counter].providename(result, socket, callbackLoop);  //call the next name provider
+		}
+
+		
+	};
 
 };
 

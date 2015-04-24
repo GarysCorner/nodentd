@@ -35,14 +35,16 @@ exports.init = function() {
 
 //all name providers must export the init function.  The function should return a username to be returned as a string, or it should return false, in which case the next name provider from the stack should be used.
 //this function should except socket even if it's not used.  Socket will contain everything we know about the request so far.
-exports.providename = function(socket) {
+exports.providename = function(result, socket, callback) {
 	
 	var inArray = rulePorts.indexOf(socket.portPair[1]);
 
-	if( inArray == -1 ) {  //there is no rule for this remote port, pass through.
-		return false;
+	if( inArray === -1 ) {  //there is no rule for this remote port, pass through.
+
+		callback(result, socket, callback);
 	} else {
-		return ruleUsers[inArray];  //return the user for this port
+
+		callback(ruleUsers[inArray], socket, callback);  //return the user for this port
 	}
 
 };
