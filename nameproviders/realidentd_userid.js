@@ -8,9 +8,8 @@ var fs = require('fs');
 
 exports.init = function() {
 
-	if( process.platform !== 'linux' ) {  //make sure we are running on linux.  Later we will warn the user and then check for the proc device and continue if it is read.
-		log.log('Real identd services are currently only availble on linux but your OS reports as "', process.platform, '"');
-		return false;
+	if( process.platform !== 'linux' ) {  //Warn if we aren't using linux
+		log.dlog('Warning!  Real identd is only test on linux but the os reports as "', process.platform, '"');
 	}
 
 	try{
