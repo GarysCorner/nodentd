@@ -31,8 +31,44 @@ exports.init = function() {
 
 			The userlist should be a text file one username per line and lines should end in '\n' not '\r\n'.
 		*/
-		userList = filedata.split('\n');  //loads the userlist
+		
+		// Split the userList on any non-alpha
+		userList = filedata.split(/[^A-Za-z0-9]/);
 
+		// Iterate through userList and remove elements from the array
+		// where the usernames are more than 10 characters, and also
+		// strip any non-alpha from each element.
+		
+		for (var i=0; i < userList.length; i++) {
+			// Strip non-alpha
+			userList[i].replace(/\W+/g, " ");
+
+			// If username is more than 10 chars
+			if (userList[i].length > 10) {
+				// Leave message
+				log.log('Recoverable: \"' + 
+					config.provider.random_fromlist.file +
+					'\", user \"' + userList[i] +
+					'\" is more than 10 characters long.' +
+					' Not including');
+				
+				// Remove username from array
+				userList.splice(i,1);
+				
+				// Reparse userList from start
+				i=-1;
+				continue;
+			}
+
+			// Remove any blank lines created by
+			// the above regex.
+			if (userList[i].length < 1) {
+				userList.splice(i,1);
+				i=-1;
+				continue;
+			}
+		}
+				
 		return true;  //good config
 	} else {
 		log.log('The file property is not defined or is not a string for the random_fromlist provider.');  //let the user know why we failed
