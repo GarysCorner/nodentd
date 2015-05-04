@@ -8,6 +8,10 @@ log = require('./logger');
 
 ///////local modules
 
+
+//log starting nodentd server closes issue#13
+log.log('==========[ nodentd starting ]==========');
+
 try {
 	config = require('./config').getconfig;  //get configuration json object
 } catch (err) {
