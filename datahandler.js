@@ -85,7 +85,7 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 
 	socket.end( response );
 
-	log.log('Response sent to :', socket.remoteAddr, ' -> ', result);
+	log.log('Response sent to :', socket.remoteAddr, ' -> ', response.slice(0,-2));
 
 };
 
