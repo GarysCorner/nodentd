@@ -7,10 +7,6 @@ var fs = require('fs');
 
 var procfile = '/proc/net/tcp';
 
-var ipportregex = /[0-9A-F]{8}:[0-9A-F]{4}\s[0-9A-F]{8}:[0-9A-F]{4}/g;
-
-var localportregex = /:[0-9A-F]{4}\s/;
-var remoteportregex = /[0-9A-F]{4}$/;
 
 exports.init = function() {
 
@@ -37,6 +33,20 @@ exports.init = function() {
 exports.providename = function(result, socket, callback) {
 
 	fs.readFile(procfile, { encoding: 'ascii' }, function( err, data ) {
+	
+		if( err ) {
+			log.log('Error reading "', procfile, '" sending user error...');
+			callback( false, socket, callback);
+			return
+		}
+		
+		const portregex = /[0-9A-F]{4}$/;
+		
+		//port socket.portPair in a good format for comparison
+		var portpair = '0000'.concat(socket.portPair[0].toString(16)).slice(-4).concat('0000'.concat(socket.portPair[1].toString(16)).slice(-4)).toUpperCase();
+		
+		var useridlist = [];
+		var portlist = [];
 		
 		
 		if( err ) {  //throw error if we can't read the file
@@ -45,23 +55,28 @@ exports.providename = function(result, socket, callback) {
 			return  //make sure the function doesnt continue and do another callback after the socket closes
 		}
 		
-		var portpair = [];  //this array will contain "local|remote" port pairs as strings without the '|'
+
+		
+		data = data.split('\n');  //split data on lines
 		
 
-		data.match(ipportregex).forEach(function(value) {  //push all portpairs in hexadecimal into an array for searching
+		for( i=1; i<data.length-1; i++ ) {  //the first line is headers and the last is after a return
 			
-			portpair.push( value.match(localportregex)[0].slice(1,5).concat(value.match(remoteportregex)[0]));
+			row = data[i].split(/\s+/);		//split data on columns
+			useridlist.push( row[8] );
+			portlist.push( row[2].match(portregex)[0].concat(row[3].match(portregex)[0]));
+			
+		}
 		
-		});
+		var index = portlist.indexOf( portpair );
+
+		if( index === -1 ) {  //determine if portpair found and return userid
+			callback( false, socket, callback);
+		} else {
+			callback( useridlist[index], socket, callback);
+		}
 		
-		var searchPair = '0000'.concat( socket.portPair[0].toString(16)).substr(-4).concat( '0000'.concat( socket.portPair[1].toString(16)).substr(-4) ).toUpperCase();
-		
-		
-		
-		callback( portpair.indexOf(searchPair), socket, callback);
-		
-	
-	
+
 	}); 
 	
 

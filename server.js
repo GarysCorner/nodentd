@@ -52,7 +52,7 @@ exports.start = function() {
 			if( (err.code === 'ECONNRESET') && (socket.remoteAddr == null) ) {  //test show this connection happens during an nmap synscan
 				log.log('Warning! Possible port scan detected!');
 			} else {
-				log.log('Connection error addr: ', socket.remoteAddr, ' destroying connection');
+				log.log('Connection error addr: ', socket.remoteAddr, ' destroying connection:  ', err.message);
 			}
 
 			socket.destroy();
