@@ -13,6 +13,16 @@ exports.getconfig = {
 		nameproviders: [ 'use_ip_port', 'use_ip', 'use_port',  'random_fromlist' /* , 'defaultname' */ ],  //list of resolvers in a typical stack
 
 		provider: {  //configuration options for the providers you can have configurations options for all providers, but only providers listed in "nameproviders" will be used
+			
+			realidentd_userid: {  //options for the realidentd_userid this plugin is used even if not listed for any plugin that provides actual identity (realidentd_*)
+				/*
+					block_sysusers: true,		//do not provider userids under 1000 because they are system users.
+					
+					
+				/*
+			},
+			
+			
 			defaultname: {    //options for default name provider.  The default name provider will only return the username specified bellow, and will not fail under any conditions as long as the username is set.  Default name will probably not be used in all but the dumbest identd servers
 				/* username: 'DefaultUser' */
 			},
@@ -47,7 +57,9 @@ exports.getconfig = {
 
 			random_fromlist: {  //options for the random_fromlist name provider.  The randome_fromlist name provider should always return a random name from the list.  The list should be one name to a line, with no blank lines, and lines should be \n NOT \r\n  (I'll fix that I promise)
 				file: './nameproviders/commonusernames.txt'
-			}
+			},
+			
+			
 		}
 
 
