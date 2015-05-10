@@ -19,7 +19,7 @@ exports.init = function() {
 	}
 
 	try{
-		var testdata = fs.readFileSync(procfile, { encoding: 'ascii' }); 
+		fs.readFileSync(procfile, { encoding: 'ascii' }); 
 	} catch( err ) {
 		log.log('realidentd_userid:  Cloud not read from "', procfile, '": ', err.message);
 		return false;
@@ -95,6 +95,7 @@ exports.providename = function(result, socket, callback) {
 		if( index === -1 ) {  //determine if portpair found and return userid
 			callback( false, socket, callback);
 		} else {
+			log.dlog('realidentd_userid:  returning userid ', useridlist[index]);
 			callback( useridlist[index], socket, callback);
 		}
 		
