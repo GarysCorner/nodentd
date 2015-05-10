@@ -49,7 +49,11 @@ exports.init = function() {
 
 
 
+const portregex = /[0-9A-F]{4}$/;
+const ipregex = /^[0-9A-F]{8}/;
+
 exports.providename = function(result, socket, callback) {
+
 
 	fs.readFile(procfile, { encoding: 'ascii' }, function( err, data ) {
 	
@@ -59,13 +63,23 @@ exports.providename = function(result, socket, callback) {
 			return
 		}
 		
-		const portregex = /[0-9A-F]{4}$/;
+
 		
 		//port socket.portPair in a good format for comparison
 		var portpair = '0000'.concat(socket.portPair[0].toString(16)).slice(-4).concat('0000'.concat(socket.portPair[1].toString(16)).slice(-4)).toUpperCase();
 		
-		var useridlist = [];
+		
+		/*
+			These 3 arrays line up with each other
+			useridlist is an array of userids stored as a string
+			portlist is a list of strings which representing the local remote port pairs in 2 consecuative sets of 4 hex characters
+			remoteiplist is a list of remoteipaddress in hex
+			
+		*/
+			
+		var useridlist = [];  
 		var portlist = [];
+		var remoteiplist = [];
 		
 		
 		if( err ) {  //throw error if we can't read the file
@@ -82,24 +96,45 @@ exports.providename = function(result, socket, callback) {
 		for( i=1; i<data.length-1; i++ ) {  //the first line is headers and the last is after a return
 			
 			row = data[i].split(/\s+/);		//split data on columns
-
+			
+			if( row[4] === '0A' ) {continue;}  //ignore listening ports
 			if( config.provider.realidentd_userid.block_sysusers && ( parseInt(row[8]) < 1000 )) {continue;} //check if userid is <1000 =sysuser
 
 			useridlist.push( row[8] );
-			portlist.push( row[2].match(portregex)[0].concat(row[3].match(portregex)[0]));
+			portlist.push( row[2].match(portregex)[0].concat(row[3].match(portregex)[0]) );
+			remoteiplist.push( row[3].match(ipregex)[0] );
+			
 			
 		}
 		
 		var index = portlist.indexOf( portpair );
-
-		if( index === -1 ) {  //determine if portpair found and return userid
-			callback( false, socket, callback);
+						
+		if( index > -1 ) {   //determine if portpair found and return userid
+		
+			//convert the remoteip to a normalized string representation
+			var remoteIP = parseInt( remoteiplist[index].substr(6,2), 16).toString().concat('.', parseInt(remoteiplist[index].substr(4,2), 16).toString() , '.', parseInt(remoteiplist[index].substr(2,2), 16).toString(), '.', parseInt(remoteiplist[index].substr(0,2), 16).toString()   );
+			
+			if( remoteIP === socket.remoteAddr ) {  //check that the portpair belongs the the client the requested it
+			
+				log.dlog('realidentd_userid:  returning userid ', useridlist[index]);
+				callback( useridlist[index], socket, callback);
+				return;
+				
+			} else {
+			
+				//log because the could be indicative of malicious probe
+				log.log('realidentd_userid:  Rejected request from ', socket.remoteAddr, ' because portpair ', socket.portPair[0], ',' ,socket.portPair[1], ' belongs to ', remoteIP);
+				callback(false, socket, callback);
+				return;
+			
+			}
+			
 		} else {
-			log.dlog('realidentd_userid:  returning userid ', useridlist[index]);
-			callback( useridlist[index], socket, callback);
+			log.dlog( 'realidentd_userid:  Did not suitable match for portpair: ', socket.portPair[0], ',', socket.portPair[1] );
+			callback( false, socket, callback);	
+			return;
 		}
 		
-
 	}); 
 	
 
