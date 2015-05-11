@@ -1,6 +1,6 @@
 //File:		realidentd_userid.js
 //App:		nodentd
-//Arthur:	Gary Bezet <nodentd@GarysCorner.NET>
+//Arthur:		Gary Bezet <nodentd@GarysCorner.NET>
 //Desciption:	This nameprovider returns the userid.  You probably shouldnt use this name provider directly it should be userd by other name providers
 
 var fs = require('fs');
@@ -15,13 +15,13 @@ exports.init = function() {
 
 	
 	if( process.platform !== 'linux' ) {  //Warn if we aren't using linux
-		log.dlog('realidentd_userid:  Warning Real identd is only test on linux but the os reports as "', process.platform, '"');
+		log.log('realidentd_userid:  Warning Real identd is only tested on linux but the os reports as "', process.platform, '"');
 	}
 
 	try{
 		fs.readFileSync(procfile, { encoding: 'ascii' }); 
 	} catch( err ) {
-		log.log('realidentd_userid:  Cloud not read from "', procfile, '": ', err.message);
+		log.log('realidentd_userid:  Could not read from "', procfile, '": ', err.message);
 		return false;
 	}
 	
