@@ -58,7 +58,7 @@ function parseline(socket) {
 
 		log.dlog('Port-pair ', socket.portPair, ' request by ', socket.remoteAddr);  //We prent this no matter what to main log file file.
 		
-		if(  socket.portPair[0] > 65535 && socket.portPair[1] > 65535) {  //invalid  port return error
+		if(  socket.portPair[0] > 65535 || socket.portPair[1] > 65535) {  //invalid  port return error
 
 			log.log('Invalid ports request ', socket.portPair, ' request by ', socket.remoteAddr );
 
