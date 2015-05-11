@@ -75,8 +75,15 @@ exports.start = function() {
 	});
 
 	server.on('error', function(err) {
-		log.log('Failed to listen on port ', config.port, ' exiting with code 6:  ', err);
-		process.exit(6);
+		if(err.code === 'EADDRINUSE') {
+			log.log( 'Failed to listen on port ', config.port, ' port is already in use, exiting with code 6.  (Do you have another instance of nodentd running?)' );
+			process.exit(6);
+		} else if( err.code === 'EACCES' ) {
+			log.log('Failed to listen on port ', config.port, ' you do not have access. (regular users cannot access low ports on some linux distros, but that doesnt mean you should run nodentd as root.  Look into workaround like rerouting the port in iptables)');
+		} else {
+			log.log('Failed to listen on port ', config.port, ' exiting with code 6:  ', err);
+			process.exit(6);
+		}
 	});
 
 	server.listen(config.port);  //start listening on the server
