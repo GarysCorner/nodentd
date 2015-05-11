@@ -9,7 +9,7 @@ fs = require('fs');
 
 
 //////////////////Code//////////////////
-var userList;
+var userList = [];
 
 //all name poviders must export the init function even it if doesnt do anything.  This is a good place to load configuration options. Init functions should only be called one time before the name provider is used
 //the function should return true if we are ready to rock, and false if there is a problem with the configuration or anything else.
@@ -20,7 +20,7 @@ exports.init = function() {
 		try {  //catch error if we can't load the read the file for any reason
 			var filedata = fs.readFileSync(config.provider.random_fromlist.file, { encoding: 'ascii' });  //read file into a variable...watch the file size on this one
 		} catch( err ) {
-			log.log('random_fromlist name provider error reading username file:  ', err );
+			log.log('random_fromlist:  name provider error reading username file:  ', err );
 			return false;
 		}
 		
@@ -31,8 +31,27 @@ exports.init = function() {
 
 			The userlist should be a text file one username per line and lines should end in '\n' not '\r\n'.
 		*/
-		userList = filedata.split('\n');  //loads the userlist
-
+		var tmpuserList = filedata.split(/\r\n|\n/);  //loads the userlist
+		
+		
+		tmpuserList.forEach(function(name) {  //check userlist for validity
+			
+			
+			if( /^[^\s\0:]+$/.test(name) ) {
+				userList.push( name );
+			} else {
+				log.dlog('random_fromlist: user name "', name,'" rejected from list ', config.provider.random_fromlist.file);
+			}
+				
+		});
+		
+		if( userList.length === 0 ) {  //no usernames in list
+			log.log('random_fromlist:  No usernames could be added from ', config.provider.random_fromlist.file);
+			return false;
+		}
+		
+		log.log('random_fromlist:  ', userList.length, '/', tmpuserList.length, ' user names added to list.');
+		
 		return true;  //good config
 	} else {
 		log.log('The file property is not defined or is not a string for the random_fromlist provider.');  //let the user know why we failed
