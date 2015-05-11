@@ -20,6 +20,10 @@ var pullportRegex = /\d{1,5}/g ;
 
 var decoder = new StringDecoder('utf8');
 
+if( config.systemName === undefined) {
+	config.systemName = 'UNIX'
+}
+
 
 exports.datareceived = function (data, socket) {
 
@@ -86,7 +90,7 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 	var response;
 
 	if( result ) {  //return the result
-		response = socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : UNIX : ', result, '\r\n');
+		response = socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : ', config.systemName, ' : ', result, '\r\n');
 	} else {
 		response = socket.portPair[0].toString().concat(', ', socket.portPair[1], ' : ERROR : NO-USER\r\n'); 
 	}
