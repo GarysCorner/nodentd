@@ -15,16 +15,15 @@ exports.getconfig = {
 		provider: {  //configuration options for the providers you can have configurations options for all providers, but only providers listed in "nameproviders" will be used
 			
 			realidentd_username: {  //options for realidentd_username this plugin provides real username by reading from realidentd_userid and /etc/password
-			
+				
+				block_sysusers: true,		//do not provider usernames under 1000 because they are system users.  this can also be controlled in realidentd_userid, unless both are set to true, sysusers will no be provided	
 			
 			},
 			
 			realidentd_userid: {  //options for realidentd_userid this plugin is used even if not listed for any plugin that provides actual identity (realidentd_*)
-				/*
-					block_sysusers: true,		//do not provider userids under 1000 because they are system users.
-					
-					
-				/*
+				
+				block_sysusers: true,		//do not provider userids under 1000 because they are system users.  default is true
+				
 			},
 			
 			

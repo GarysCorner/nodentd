@@ -18,13 +18,7 @@ exports.init = function() {
 		log.log('realidentd_userid:  Warning Real identd is only tested on linux but the os reports as "', process.platform, '"');
 	}
 
-	try{
-		fs.readFileSync(procfile, { encoding: 'ascii' }); 
-	} catch( err ) {
-		log.log('realidentd_userid:  Could not read from "', procfile, '": ', err.message);
-		return false;
-	}
-	
+
 
 	if( config.provider.realidentd_userid === undefined ) {  //check if the configuration has been set
 		log.log('realidentd_userid:  Warning config.provider.realidentd_userid is not set, it a good idea to configure it.');
@@ -34,10 +28,18 @@ exports.init = function() {
 	
 	if( config.provider.realidentd_userid.block_sysusers === undefined ) { //check if block_sysusers is set and set default
 	
-		log.log('realidentd_userid:  blocksysusers not set, defaulting to true for security.');
+		log.log('realidentd_userid:  block_sysusers not set, defaulting to true for security.');
 		config.provider.realidentd_userid.block_sysusers = true;
 	
 	}
+
+	try{
+		fs.readFileSync(procfile, { encoding: 'ascii' }); 
+	} catch( err ) {
+		log.log('realidentd_userid:  Could not read from "', procfile, '": ', err.message);
+		return false;
+	}
+	
 
 	realconf = config.provider.realidentd_userid;
 

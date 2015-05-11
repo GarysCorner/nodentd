@@ -30,6 +30,20 @@ exports.init = function() {
 	}
 	
 	
+
+	if( config.provider.realidentd_username === undefined ) {  //check if the configuration has been set
+		log.log('realidentd_username:  Warning config.provider.realidentd_username is not set, it a good idea to configure it.');
+		config.provider.realidentd_username = { };
+	}
+	
+	
+	if( config.provider.realidentd_username.block_sysusers === undefined ) { //check if block_sysusers is set and set default
+	
+		log.log('realidentd_username:  block_sysusers not set, defaulting to true for security.');
+		config.provider.realidentd_username.block_sysusers = true;
+	
+	}
+	
 	var userfiledata;
 	
 	
@@ -48,7 +62,7 @@ exports.init = function() {
 		
 		if(row.length < 3) {return;}  //get rid of invalid lines, like the trailing line
 		
-		if( parseInt( row[2] ) < 1000 ) {return;} //get rid of system users
+		if( config.provider.realidentd_username.block_sysusers && parseInt( row[2] ) < 1000 ) {return;} //get rid of system users for security if block_sysuser set to true
 		
 		usernamemap[row[2]] = row[0];
 		
@@ -84,7 +98,7 @@ exports.providename = function(mainresult, mainsocket, maincallback) {
 		var username = usernamemap[result];
 		
 		if( username === undefined ) {
-			log.dlog('realidentd_username:  realidentd_userid provider an id but it could not be mapped!');
+			log.dlog('realidentd_username:  realidentd_userid provider an id but it could not be mapped! (possibly sysuser?)');
 			maincallback(false, socket, maincallback);
 			return;
 		} else {
