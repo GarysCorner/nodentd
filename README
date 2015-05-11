@@ -1,13 +1,19 @@
 README
 ===================
 
-nodentd v1.0 by:  Gary Bezet <nodentd@GarysCorner.NET>
+nodentd v1.5 by:  Gary Bezet <nodentd@GarysCorner.NET>
 ----------------------------------------------------------
 pronounced no-dent-D
 
 
 Change Log
 +++++++++++++++++++
+
+v1.5	-	Prerelease of real ident server
+	*Added real ident server capabilities
+	*Fixed bug #18
+	*Fixed bug #12
+	*Made nameprovider async
 
 v1.0	-	First real stable release
 	*Detect possible portscan
