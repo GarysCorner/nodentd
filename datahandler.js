@@ -80,12 +80,12 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 	if( result ) {  //return the result
 		response = socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : UNIX : ', result, '\r\n');
 	} else {
-		response = '23, 6195 : ERROR : NO-USER\r\n'; 
+		response = socket.portPair[0].toString().concat(', ', socket.portPair[1], ' : ERROR : NO-USER\r\n'); 
 	}
 
 	socket.end( response );
 
-	log.log('Response sent to :', socket.remoteAddr, ' -> ', response.slice(0,-2));
+	log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2));
 
 };
 
