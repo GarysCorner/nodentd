@@ -20,6 +20,10 @@ try {
 	process.exit(3);
 }
 
+if( config.setTimeout === undefined ) {  //set timeout if it isnt set
+	config.setTimeout = 10;
+}
+
 datahandler = require('./datahandler');  //get datahandler module
 
 server = require('./server');

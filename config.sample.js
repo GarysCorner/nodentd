@@ -8,6 +8,7 @@
 exports.getconfig = {  
 
 		port: 113,  //port to listen on
+		setTimeout: 10,  //(seconds) timeout if no valid request is received before [setTimeout] seconds.  Default:  10
 		debug: false,  //toggle the debug which will set the verbosity very high
 
 		nameproviders: [ 'use_ip_port', 'use_ip', 'use_port',  'random_fromlist' /* , 'defaultname' */ ],  //list of resolvers in a typical stack
