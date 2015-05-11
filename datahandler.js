@@ -24,15 +24,23 @@ var decoder = new StringDecoder('utf8');
 exports.datareceived = function (data, socket) {
 
 	socket.linebuff += decoder.write(data);  //add data to the linebuffer
+	
+	if(socket.linebuff.length > 30) {
+		socket.end();
+		log.log('Too much data (', socket.linebuff.length ,' bytes) received from:  ', socket.remoteAddr);
+	}
 
 	if( socket.linebuff.slice(-1) == '\n' ) { 
 		
 		parseline(socket);
 				
+	} else {
+		if( Math.floor(new Date()/1000) > socket.cancelTime ) {
+			socket.end();
+			log.dlog('No valid line received before timeout:  ', socket.remoteAddr, '  ', socket.linebuff.length, ' bytes received.');
+		}
 	}
-
 	
-
 };
 
 
