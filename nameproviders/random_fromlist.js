@@ -18,7 +18,7 @@ exports.init = function() {
 	if( typeof config.provider.random_fromlist.file === 'string' ) { //check if file is set is set.
 		
 		try {  //catch error if we can't load the read the file for any reason
-			var filedata = fs.readFileSync(config.provider.random_fromlist.file, { encoding: 'ascii' });  //read file into a variable...watch the file size on this one
+			var filedata = fs.readFileSync(config.provider.random_fromlist.file);  //read file into a variable...watch the file size on this one
 		} catch( err ) {
 			log.log('random_fromlist:  name provider error reading username file:  ', err );
 			return false;
@@ -31,7 +31,7 @@ exports.init = function() {
 
 			The userlist should be a text file one username per line and lines should end in '\n' not '\r\n'.
 		*/
-		var tmpuserList = filedata.split(/\r\n|\n/);  //loads the userlist
+		var tmpuserList = filedata.toString().split(/\r\n|\n/);  //loads the userlist
 		
 		
 		tmpuserList.forEach(function(name) {  //check userlist for validity
