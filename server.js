@@ -19,7 +19,7 @@ net = require('net');
 
 //Creat the inital server
 
-
+var server;
 exports.start = function() { 
 
 
@@ -91,3 +91,28 @@ exports.start = function() {
 
 
 }
+
+//catch the SIGINT to gracefully exit issue #24
+process.on('SIGINT', function() {
+	
+	var sigint_recvd = false;  //has another SIGINT already been received?
+	
+	return function() {
+	
+		if( sigint_recvd === false ) {  
+			log.log('SIGINT received, waiting for all connection to close and attempting to exit (CTRL+C again to exit now)...');
+			server.close();
+		} else {
+			log.log('a second SIGINT was recieved exiting NOW!');
+			process.exit();
+		}
+		
+		sigint_recvd = true;
+		
+	};
+		
+	
+		
+}());
+
+process.on('exit', function() { log.log('==========[ nodentd stopped ]=========='); });
