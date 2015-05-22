@@ -103,6 +103,3 @@ exports.start = function() {
 
 }
 
-
-
-process.on('exit', function() { log.log('==========[ nodentd stopped ]=========='); });

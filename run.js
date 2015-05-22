@@ -3,15 +3,35 @@
 //Arthur:	Gary Bezet <nodentd@GarysCorner.NET>
 //Desciption:	Main application entry point
 
-//////////////////Put require statements here//////////////////
+
+
+
+
 log = require('./logger');
 stats = require('./stats').start;
-
-///////local modules
 
 
 //log starting nodentd server closes issue#13
 log.log('==========[ nodentd starting ]==========');
+
+
+try {
+	config = require('./config').getconfig;  //get configuration json object
+} catch (err) {
+	log.log('Fatal error cannot open "config.js"');
+	log.log(err);
+	process.exit(3);
+}
+
+if( config.setTimeout === undefined ) {  //set timeout if it isnt set
+	config.setTimeout = 10;
+}
+
+datahandler = require('./datahandler');  //get datahandler module
+
+server = require('./server');
+
+
 
 
 //catch the SIGINT to gracefully exit issue #24
@@ -39,30 +59,9 @@ process.on('SIGINT', function() {
 		
 }());
 
-
-try {
-	config = require('./config').getconfig;  //get configuration json object
-} catch (err) {
-	log.log('Fatal error cannot open "config.js"');
-	log.log(err);
-	process.exit(3);
-}
-
-if( config.setTimeout === undefined ) {  //set timeout if it isnt set
-	config.setTimeout = 10;
-}
-
-datahandler = require('./datahandler');  //get datahandler module
-
-server = require('./server');
+process.on('exit', function() { log.log('==========[ nodentd stopped ]=========='); });
 
 
-//////////////////Globals//////////////////
-
-
-
-
-//////////////////Code//////////////////
 //faile with exit code 1 if we can't start the server or any error bubbles up
 try {
 	server.start();  //start the server
