@@ -8,8 +8,6 @@
 
 
 log = require('./logger');
-stats = require('./stats').start;
-
 
 //log starting nodentd server closes issue#13
 log.log('==========[ nodentd starting ]==========');
@@ -27,11 +25,22 @@ if( config.setTimeout === undefined ) {  //set timeout if it isnt set
 	config.setTimeout = 10;
 }
 
-datahandler = require('./datahandler');  //get datahandler module
 
+stats = require('./stats').start;
+datahandler = require('./datahandler');  //get datahandler module
 server = require('./server');
 
 
+
+
+//faile with exit code 1 if we can't start the server or any error bubbles up
+try {
+	server.start();  //start the server
+} catch( err ) {
+	log.log('Fatal error failed to start server!');
+	log.log(err);
+	process.exit(1);
+}
 
 
 //catch the SIGINT to gracefully exit issue #24
@@ -61,13 +70,4 @@ process.on('SIGINT', function() {
 
 process.on('exit', function() { log.log('==========[ nodentd stopped ]=========='); });
 
-
-//faile with exit code 1 if we can't start the server or any error bubbles up
-try {
-	server.start();  //start the server
-} catch( err ) {
-	log.log('Fatal error failed to start server!');
-	log.log(err);
-	process.exit(1);
-}
 
