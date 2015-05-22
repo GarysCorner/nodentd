@@ -13,6 +13,33 @@ stats = require('./stats').start;
 //log starting nodentd server closes issue#13
 log.log('==========[ nodentd starting ]==========');
 
+
+//catch the SIGINT to gracefully exit issue #24
+process.on('SIGINT', function() {
+	
+	var sigint_recvd = false;  //has another SIGINT already been received?
+	
+	return function() {
+	
+		if( sigint_recvd === false ) {  
+			log.log('SIGINT received, waiting for all connection to close and attempting to exit (CTRL+C again to exit now)...');
+			server.close();
+		} else {
+			log.log('a second SIGINT was recieved exiting NOW!');
+			stats.serverStopTime = new Date();  //the server didnt stop normally so we need to supply this value
+			stats.logStats();
+			process.exit();
+		}
+		
+		sigint_recvd = true;
+		
+	};
+		
+	
+		
+}());
+
+
 try {
 	config = require('./config').getconfig;  //get configuration json object
 } catch (err) {
