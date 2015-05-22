@@ -90,8 +90,10 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 	var response;
 
 	if( result ) {  //return the result
+		stats.nameProvided()
 		response = socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : ', config.systemName, ' : ', result, '\r\n');
 	} else {
+		stats.nameDenied();
 		response = socket.portPair[0].toString().concat(', ', socket.portPair[1], ' : ERROR : NO-USER\r\n'); 
 	}
 

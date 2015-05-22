@@ -5,6 +5,7 @@
 
 //////////////////Put require statements here//////////////////
 log = require('./logger');
+stats = require('./stats').start;
 
 ///////local modules
 

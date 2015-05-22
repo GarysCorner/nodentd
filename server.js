@@ -19,13 +19,15 @@ net = require('net');
 
 //Creat the inital server
 
-var server;
+
 exports.start = function() { 
 
 
 	
 
 	server = net.createServer(function( socket ) {  //create the server
+	
+		stats.addConnection();
 
 		socket.setEncoding('ascii');  //set the encoding	
 	
@@ -35,7 +37,6 @@ exports.start = function() {
 		socket.cancelTime = Math.floor(new Date()/1000) + config.setTimeout;
 
 		log.dlog( 'Connection open from ', socket.remoteAddr);
-
 
 		socket.on('data', function(data) {
 			datahandler.datareceived(data, socket);
@@ -51,6 +52,7 @@ exports.start = function() {
 
 		socket.on('error', function(err) {
 			if( (err.code === 'ECONNRESET') && (socket.remoteAddr == null) ) {  //test show this connection happens during an nmap synscan
+				stats.portScaned();
 				log.log('Warning! Possible port scan detected!');
 			} else {
 				log.log('Connection error addr: ', socket.remoteAddr, ' destroying connection:  ', err.message);
@@ -72,6 +74,15 @@ exports.start = function() {
 
 	server.on('listening', function() {
 		log.log('nodentd listening on port ', config.port );
+		stats.serverStartTime = new Date();
+	});
+	
+	server.on('close', function() {
+		stats.serverStopTime = new Date();
+		log.dlog('server stopped');
+		
+		stats.logStats();
+		
 	});
 
 	server.on('error', function(err) {
