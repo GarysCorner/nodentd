@@ -100,9 +100,22 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 		response = socket.portPair[0].toString().concat(', ', socket.portPair[1], ' : ERROR : NO-USER\r\n'); 
 	}
 
-	socket.end( response );
+	socket.write( response, 'ascii', function() {
 
-	log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2), ' | lookupTime = ', socket.lookupTime - socket.lineRecvTime, 'ms');
+		socket.disconnTime = new Date();		
+		
+		var lookupTime = socket.lookupTime - socket.lineRecvTime;
+		var waitTime = socket.lineRecvTime - socket.connTime
+		var totalTime = socket.disconnTime - socket.connTime;	
+		
+		stats.addStatTime( lookupTime, waitTime, totalTime );
+			
+		log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2), ' | waitTime=', waitTime, 'ms lookupTime=', lookupTime , 'ms, connTime=', totalTime ,'ms');	
+
+		socket.end();
+	});
+
+	
 
 };
 

@@ -25,6 +25,22 @@ exports.start = function() {
 		nameDenied: function() { this.namesDenied++; },
 		portScaned: function() { this.portScans++ },
 		
+		
+		lookupTime: 0,
+		lookupCount: 0,
+		waitTime: 0,
+		totalTime: 0,		
+		
+		addStatTime: function(lookup, wait, total) {
+			this.lookupCount++;
+
+			this.lookupTime += lookup;
+			this.waitTime += wait;
+			this.totalTime += total;
+
+		},
+		
+		
 		//start the timer
 		startTimer: function() {
 			
@@ -56,9 +72,13 @@ exports.start = function() {
 			log.log( 'Possible port scans:  ', this.portScans );
 			log.log( 'Names provided: ', this.namesProvided);
 			log.log( 'Names denied: ', this.namesDenied);
-			log.log( 'Name resolution rate:  ', Math.round((this.namesProvided / (this.namesProvided + this.namesDenied ) ) * 100), '%');
 
-	
+			if( this.lookupCount > 0 ) {
+				log.log( 'Name resolution rate:  ', Math.round((this.namesProvided / (this.lookupCount ) ) * 100), '%');			
+				log.log( 'Average Latency:  waitTime=', this.waitTime / this.lookupCount , 'ms, lookupTime=', this.lookupTime / this.lookupCount , 'ms, connTime=', this.totalTime / this.lookupCount ,'ms' );				
+
+			}
+			
 		}
 	};
 	
