@@ -39,7 +39,7 @@ exports.start = function() {
 		
 		socket.cancelTime = Math.floor(socket.connTime/1000) + config.setTimeout;
 		
-		
+		socket.socketError = false;
 
 		log.dlog( 'Connection open from ', socket.remoteAddr);
 
@@ -56,6 +56,8 @@ exports.start = function() {
 		});
 
 		socket.on('error', function(err) {
+			socket.socketError = true;
+		
 			if( (err.code === 'ECONNRESET') && (socket.remoteAddr == null) ) {  //test show this connection happens during an nmap synscan
 				stats.portScaned();
 				log.log('Warning! Possible port scan detected!');

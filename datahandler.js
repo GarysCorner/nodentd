@@ -102,15 +102,18 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 
 	socket.write( response, 'ascii', function() {
 
-		socket.disconnTime = new Date();		
+		if( socket.socketError === false ) {  //dont send the data if a socket error has already been record, also discard timing stats
+			socket.disconnTime = new Date();		
 		
-		var lookupTime = socket.lookupTime - socket.lineRecvTime;
-		var waitTime = socket.lineRecvTime - socket.connTime
-		var totalTime = socket.disconnTime - socket.connTime;	
+			var lookupTime = socket.lookupTime - socket.lineRecvTime;
+			var waitTime = socket.lineRecvTime - socket.connTime
+			var totalTime = socket.disconnTime - socket.connTime;	
 		
-		stats.addStatTime( lookupTime, waitTime, totalTime );
+			stats.addStatTime( lookupTime, waitTime, totalTime );
 			
-		log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2), ' | waitTime=', waitTime, 'ms lookupTime=', lookupTime , 'ms, connTime=', totalTime ,'ms');	
+			log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2), ' | waitTime=', waitTime, 'ms lookupTime=', lookupTime , 'ms, connTime=', totalTime ,'ms');	
+			
+		}
 
 		socket.end();
 	});
