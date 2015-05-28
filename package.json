@@ -1,0 +1,30 @@
+{
+  "name": "nodentd",
+  "version": "1.5.1",
+  "description": "A highly configurable and extendable ident server written for Node.js (JavaScript) which can provider usernames based on the connect user (real ident) or on the remote ip, port request (fake ident), and more as well as returning random or default usernames.",
+  "author": "Gary Bezet <nodentd@GarysCorner.Net>",
+  "homepage": "https://github.com/GarysCorner/nodentd",
+  
+  "bin": {
+  "module-name": "./run.js"
+  },
+  
+
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/GarysCorner/nodentd.git"
+},
+  "bugs": {
+  "url": "https://github.com/GarysCorner/nodentd/issues"
+},
+  "keywords": [
+  "nodent",
+  "nodentd",
+  "ident",
+  "identd"
+],
+
+  "preferGlobal": false,
+  
+  "license": "GPLv3"
+}
