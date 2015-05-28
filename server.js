@@ -34,7 +34,12 @@ exports.start = function() {
 		socket.remoteAddr = socket.remoteAddress;  //save the remote address in case we need it after close
 		socket.linebuff = '';  //initalize the linebuffer
 		socket.lineRecv = false;  //set lineRecv so we can tell if a line was received when the client exits.  (Fix issue#1)
-		socket.cancelTime = Math.floor(new Date()/1000) + config.setTimeout;
+		
+		socket.connTime = new Date();  //capture the connection timel
+		
+		socket.cancelTime = Math.floor(socket.connTime/1000) + config.setTimeout;
+		
+		
 
 		log.dlog( 'Connection open from ', socket.remoteAddr);
 
@@ -60,6 +65,8 @@ exports.start = function() {
 
 			socket.destroy();
 		});
+		
+
 		
 		socket.setTimeout(1000 * config.setTimeout, function() {
 			socket.end();

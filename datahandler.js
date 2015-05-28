@@ -52,6 +52,7 @@ exports.datareceived = function (data, socket) {
 function parseline(socket) {
 
 	socket.lineRecv = true;  //set lineRecv so we can throw log even if there is no from client.  (Fix issue#1)
+	socket.lineRecvTime = new Date();
 
 	if( validcheckRegex.test(socket.linebuff) ) {
 		log.dlog('Line from ', socket.remoteAddr, ' tests valid format');  //verbose
@@ -89,6 +90,8 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 
 	var response;
 
+	socket.lookupTime = new Date();
+
 	if( result ) {  //return the result
 		stats.nameProvided()
 		response = socket.portPair[0].toString().concat( ', ', socket.portPair[1].toString(), ' : USERID : ', config.systemName, ' : ', result, '\r\n');
@@ -99,7 +102,7 @@ function sendReplyCallBack(result, socket) {  //our callback to send the
 
 	socket.end( response );
 
-	log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2));
+	log.log('Response sent to: ', socket.remoteAddr, ' -> ', response.slice(0,-2), ' | lookupTime = ', socket.lookupTime - socket.lineRecvTime, 'ms');
 
 };
 
