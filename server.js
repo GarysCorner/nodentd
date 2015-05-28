@@ -74,11 +74,12 @@ exports.start = function() {
 
 	server.on('listening', function() {
 		log.log('nodentd listening on port ', config.port );
-		stats.serverStartTime = new Date();
+		stats.serverStartTime = new Date();  //set the time that the server started listening
+		stats.startTimer(); //start the timer for displaying stats
 	});
 	
 	server.on('close', function() {
-		stats.serverStopTime = new Date();
+	
 		log.dlog('server stopped');
 		
 		stats.logStats();

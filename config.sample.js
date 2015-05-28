@@ -10,6 +10,8 @@ exports.getconfig = {
 		port: 113,  //port to listen on
 		systemName: 'UNIX', //set the system name, default is 'UNIX'  see https://tools.ietf.org/html/rfc1340#page-87
 		setTimeout: 10,  //(seconds) timeout if no valid request is received before [setTimeout] seconds.  Default:  10
+		displayStats: 10,  //display the stats every ten minutes, set to false or 0 to disable.
+		
 		debug: false,  //toggle the debug which will set the verbosity very high
 
 		nameproviders: [ 'use_ip_port', 'use_ip', 'use_port', 'realidentd_username'  /* 'random_fromlist',  'defaultname' */ ],  //list of resolvers in a typical stack

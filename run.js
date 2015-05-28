@@ -26,7 +26,7 @@ if( config.setTimeout === undefined ) {  //set timeout if it isnt set
 }
 
 
-stats = require('./stats').start;
+stats = require('./stats').start();
 datahandler = require('./datahandler');  //get datahandler module
 server = require('./server');
 
@@ -49,6 +49,8 @@ process.on('SIGINT', function() {
 	var sigint_recvd = false;  //has another SIGINT already been received?
 	
 	return function() {
+	
+		stats.stopTimer();
 	
 		if( sigint_recvd === false ) {  
 			log.log('SIGINT received, waiting for all connection to close and attempting to exit (CTRL+C again to exit now)...');
