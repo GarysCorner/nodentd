@@ -1,9 +1,9 @@
-README
+﻿README
 ===================
 
 nodentd v1.5 by:  Gary Bezet <nodentd@GarysCorner.NET>
 ----------------------------------------------------------
-pronounced no-dent-D
+pronounced node-ent-D
 
 
 Change Log
@@ -23,6 +23,11 @@ v1.0	-	First real stable release
 v0.9    -	Initial commit
 
 
+About
++++++++++++++++++++
+
+nodentd is a highly configurable ident server written in Node.js.  In addition to returning usernames and userids, nodentd can return default usernames, random usernames from a list, usernames based on the request IP, port or both.  nodentd was create by Gary Bezet, and is licensed under GPLv3.
+
 
 Setup
 +++++++++++++++++++
@@ -31,7 +36,7 @@ To setup nodentd, simple copy the contents of config.sample.js to config.js.  Th
 
 Configuration is done by exporting a JSON object so make sure your formating is correct.  DO NO EXCEPT CONFIG FILES FROM PEOPLE YOU DO NOT KNOW, config files are run just like any other part of the program and malicious users can insert code.
 
-The name providers are called in the order listed in the nameprovders array.  If a nameprovider returns false (no name) then the next provider is used.  Keep in mind that some providers like the "random_fromlist" provider and the "defaultname" provider always return a valid username and so no nameproviders placed after them in the stack will ever be called.
+The name providers are called in the order listed in the nameprovders array.  If a nameprovider returns false (no name) then the next provider is used.  Keep in mind that some providers like the "random_fromlist" provider and the "defaultname" provider always return a valid username and so no nameproviders placed after them in the stack will ever be called.  Additionally some name providers like the realidentd_username rely on other name providers (realidentd_userid).
 
 To test your config file you may want to setup "debug" to true, which will produce more output.
 
