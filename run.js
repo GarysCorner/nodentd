@@ -1,10 +1,10 @@
 //File:		run.js
 //App:		nodentd
-//Arthur:	Gary Bezet <nodentd@GarysCorner.NET>
+//Arthur:		Gary Bezet <nodentd@GarysCorner.NET>
 //Desciption:	Main application entry point
 
 
-
+require('./cmdlineopts').parse();
 
 
 log = require('./logger');
@@ -21,10 +21,10 @@ try {
 	process.exit(3);
 }
 
+
 if( config.setTimeout === undefined ) {  //set timeout if it isnt set
 	config.setTimeout = 10;
 }
-
 
 stats = require('./stats').start();
 datahandler = require('./datahandler');  //get datahandler module
