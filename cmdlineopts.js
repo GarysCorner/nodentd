@@ -20,6 +20,9 @@ exports.parse = function() {
 			case '--nameproviders':
 				//configure config.nameproviders
 				i++;
+				
+				config.nameproviders = process.argv[i].split(",");
+				
 				break;
 	
 		
@@ -27,13 +30,14 @@ exports.parse = function() {
 			case '--statsinterval':
 				//configure config.displayStats
 				i++;
+				config.displayStats = parseInt(process.argv[i]);
 				break;
 	
 		
 			case '-d':
 			case '--debug':
 				//configure config.debug
-				i++;
+				config.debug = true;
 				break;
 	
 		
@@ -41,6 +45,7 @@ exports.parse = function() {
 			case '--systemname':
 				//configure config.systemName
 				i++;
+				config.systemName = process.argv[i];
 				break;
 	
 		
@@ -48,12 +53,14 @@ exports.parse = function() {
 			case '--timeout':
 				//configure config.setTimeout
 				i++;
+				config.setTimeout = parseInt(process.argv[i]);
 				break;
 		
 			case '-p':
 			case '--port':
 				//configure the port
 				i++;
+				config.port = parseInt(process.argv[i]);
 				break;		
 			
 			case '-h':

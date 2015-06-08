@@ -4,8 +4,6 @@
 //Desciption:	Main application entry point
 
 
-require('./cmdlineopts').parse();
-
 
 log = require('./logger');
 
@@ -20,6 +18,8 @@ try {
 	log.log(err);
 	process.exit(3);
 }
+
+require('./cmdlineopts').parse();
 
 
 if( config.setTimeout === undefined ) {  //set timeout if it isnt set
