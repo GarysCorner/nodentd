@@ -3,12 +3,12 @@
 //Arthur:		Gary Bezet <nodentd@GarysCorner.NET>
 //Desciption:	Main application entry point
 
-
+version = '1.5';
 
 log = require('./logger');
 
 //log starting nodentd server closes issue#13
-log.log('==========[ nodentd starting ]==========');
+
 
 
 try {
@@ -21,6 +21,7 @@ try {
 
 require('./cmdlineopts').parse();
 
+log.log('==========[ nodentd starting ]==========');
 
 if( config.setTimeout === undefined ) {  //set timeout if it isnt set
 	config.setTimeout = 10;
