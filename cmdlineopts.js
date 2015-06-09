@@ -21,7 +21,8 @@ exports.parse = function() {
 				//configure config.nameproviders
 				i++;
 				
-				config.nameproviders = process.argv[i].split(",");
+				config.nameproviders = process.argv[i].replace(/\s/g, '');
+				config.nameproviders = config.nameproviders.split(',');
 				
 				break;
 	
