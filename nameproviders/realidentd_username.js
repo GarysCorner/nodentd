@@ -4,16 +4,14 @@
 //Desciption:	This nameprovider returns the REAL username.  This name provider requires the realidentd_userid name provider to do the heavy lifting
 
 
-
+var timer = null;
 var fs = require('fs');
 var realidentd_userid = require('./realidentd_userid');
 
 
 var userfile = '/etc/passwd';
 
-var usernamemap = {
-	length: 0
-};
+var usernamemap = null;
 
 exports.init = function() {
 
@@ -44,8 +42,32 @@ exports.init = function() {
 	
 	}
 	
-	var userfiledata;
+	if( config.provider.realidentd_username.loadInterval === undefined ) { //check if loadInterval is set
 	
+		log.log('realidentd_username:  loadInterval not set, defaulting to 60 minutes.');
+		config.provider.realidentd_username.loadInterval = 60;
+	
+	}
+	
+	if( loadNames(true) ) {
+		
+		if( config.provider.realidentd_username.loadInterval > 0 ) {
+			realidend_username_timer = setInterval(function(){loadNames(false);}, config.provider.realidentd_username.loadInterval * 1000 * 60);
+		}
+		
+		return true;
+	} 
+	
+	return false;  //return false if true isn't returned by the above
+}
+
+
+//load the usernames here use
+function loadNames(verbose) {
+
+	var userfiledata;
+	var tempusernamemap = { length: 0 };
+
 	
 	try{
 		userfiledata = fs.readFileSync(userfile, { encoding: 'ascii' }); 
@@ -64,26 +86,32 @@ exports.init = function() {
 		
 		if( config.provider.realidentd_username.block_sysusers && parseInt( row[2] ) < 1000 ) {return;} //get rid of system users for security if block_sysuser set to true
 		
-		usernamemap[row[2]] = row[0];
+		tempusernamemap[row[2]] = row[0];
 		
-		log.dlog('realidentd_username:  "', row[0], '" added to usermap with id ', row[2]);
+		verbose && log.dlog('realidentd_username:  "', row[0], '" added to usermap with id ', row[2]);
 		
-		usernamemap.length++;
+		tempusernamemap.length++;
 			
 	}); 
 	
-	log.log('realidentd_username:  ', usernamemap.length, ' user names added to usermap');
+	verbose && log.log('realidentd_username:  ', tempusernamemap.length, ' user names added to usermap');
 	
-	if( usernamemap.length === 0 ) {  //fail if there are no usernames
+	if( tempusernamemap.length === 0 ) {  //fail if there are no usernames
 	
-		log.log('realidentd_username:  fatal error, no user names were found in ', userfile);
+		if(verbose) {
+			log.log('realidentd_username:  fatal error, no user names were found in ', userfile);
+		} else {
+			log.log('realidentd_username:  error reading from ', userfile, ' keeping current list.');
+		}
 		return false;  //config failed
 	
 	}
 	
+	usernamemap = tempusernamemap;
+	
 	return true;
 
-}
+};
 
 
 

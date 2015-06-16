@@ -8,7 +8,8 @@ version = '1.5';
 log = require('./logger');
 
 //log starting nodentd server closes issue#13
-
+//variables for realidentd_username timer
+realidend_username_timer = null;
 
 
 try {
@@ -52,7 +53,12 @@ process.on('SIGINT', function() {
 	return function() {
 	
 		stats.stopTimer();
-	
+		
+		if(realidend_username_timer !== null) {
+			clearInterval(realidend_username_timer);
+			log.dlog('realidentd_username:  Stopping timer.');
+		}
+		
 		if( sigint_recvd === false ) {  
 			log.log('SIGINT received, waiting for all connection to close and attempting to exit (CTRL+C again to exit now)...');
 			server.close();

@@ -21,7 +21,7 @@ exports.getconfig = {
 			realidentd_username: {  //options for realidentd_username this plugin provides real username by reading from realidentd_userid and /etc/password
 				
 				block_sysusers: true,		//do not provider usernames under 1000 because they are system users.  this can also be controlled in realidentd_userid, unless both are set to true, sysusers will no be provided	
-			
+				loadInterval: 60, 		//reload the password file every x minutes.
 			},
 			
 			realidentd_userid: {  //options for realidentd_userid this plugin is used even if not listed for any plugin that provides actual identity (realidentd_*)
