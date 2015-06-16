@@ -20,7 +20,13 @@ exports.init = function() {
 		
 		log.dlog('Loading name provider: ', config.nameproviders[i]);
 
-		providers.push(require('./nameproviders/'.concat( config.nameproviders[i])));
+		try {
+			providers.push(require('./nameproviders/'.concat( config.nameproviders[i])));
+		} catch( error ) {
+			log.log(error.message);
+			log.log('Fatal error!');
+			process.exit(2);
+		}
 		
 
 		log.dlog('Intializeing name provider: ', config.nameproviders[i]);
